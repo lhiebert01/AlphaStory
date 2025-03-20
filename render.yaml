@@ -4,7 +4,7 @@ services:
     name: alphabet-adventure
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run alphabet_book_streamlit_app11.py
+    startCommand: streamlit run app.py
     plan: free # Update to a paid plan for production
     autoDeploy: true
     
