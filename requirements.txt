@@ -1,0 +1,24 @@
+# This is a requirements file for a Python project.
+# It lists all the dependencies needed to run the project.
+# Main dependencies for the Alphabet Adventure application
+streamlit>=1.29.0
+python-dotenv>=1.0.0
+openai>=1.3.0
+gtts>=2.3.2
+google-cloud-texttospeech>=2.25.1
+requests>=2.31.0
+Pillow>=10.0.0
+
+# Additional dependencies for utility scripts and future functionality
+fastapi
+uvicorn
+python-multipart
+jinja2
+google-generativeai
+certifi
+asyncio
+reportlab
+google-cloud-aiplatform
+mutagen
+pydub
+google-cloud-texttospeech

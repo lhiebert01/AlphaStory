@@ -1,0 +1,60 @@
+# Python environment
+venv/
+env/
+.env
+.env.*
+!.env.template
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm / VS Code
+.idea/
+.vscode/
+
+# Google Cloud credentials
+*.json
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# API keys and secret files
+*.pem
+secrets.toml
+
+# Utility files
+printproject.py
+standardized_prompt_maker.py
+app2*
+*_test.py
+prompt_analyzer_app.py
+html_for_gemini_stories.py
+pdf_creator_for_gemini_stories.py
+single_letter_image_generator.py
+story_generator*.py
+story_maker_integrated.py
+storywriter2.py
+
+# Generated files
+project-structure.txt
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Streamlit specific
+.streamlit/secrets.toml

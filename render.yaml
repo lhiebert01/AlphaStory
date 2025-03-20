@@ -1,0 +1,33 @@
+services:
+  # Web app service
+  - type: web
+    name: alphabet-adventure
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run alphabet_book_streamlit_app11.py
+    plan: free # Update to a paid plan for production
+    autoDeploy: true
+    
+    # Performance and scaling options
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: OPENAI_API_KEY
+        sync: false # Set this in the Render dashboard
+      - key: PYTHONUNBUFFERED
+        value: true
+      - key: STREAMLIT_SERVER_PORT
+        value: 8501
+      - key: STREAMLIT_SERVER_HEADLESS
+        value: true
+      - key: STREAMLIT_SERVER_ENABLE_CORS
+        value: false
+      - key: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+        value: false
+      
+    # Specify the same file structure 
+    # Files not included in the git repository won't be deployed
+    disk:
+      name: alphabet-book
+      mountPath: /var/data
+      sizeGB: 10 # Adjust based on the size of your audio and image files
