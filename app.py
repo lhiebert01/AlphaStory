@@ -45,6 +45,34 @@ if 'has_purchased' not in st.session_state:
 if 'selected_voice' not in st.session_state:
     st.session_state.selected_voice = "Female 1"
 
+# Function to detect iOS devices
+def is_ios_device():
+    """Detect if user is on an iOS device using User-Agent"""
+    try:
+        # Try to get user agent directly if available
+        user_agent = st.query_params.get('user_agent', [''])[0].lower() if hasattr(st, 'query_params') else ''
+        if user_agent and ('iphone' in user_agent or 'ipad' in user_agent or 'ipod' in user_agent):
+            return True
+            
+        # For older Streamlit versions, try this approach
+        if hasattr(st, 'get_query_params'):
+            user_agent = st.get_query_params().get('user_agent', [''])[0].lower()
+            if 'iphone' in user_agent or 'ipad' in user_agent or 'ipod' in user_agent:
+                return True
+                
+        # Last resort - assume iOS for any Safari browser to be safe
+        # This isn't perfect but helps ensure compatibility
+        if hasattr(st, 'query_params'):
+            user_agent = st.query_params.get('user_agent', [''])[0].lower()
+            if 'safari' in user_agent and 'chrome' not in user_agent:
+                return True
+    except:
+        # If detection fails, we'll play it safe and assume non-iOS
+        pass
+    
+    # Default fallback - for debugging, you could set this to True to force iOS mode
+    return False
+
 # Function to read a story from file
 def read_story(letter):
     story_path = os.path.join(STORIES_DIR, f"{letter}_story.txt")
@@ -88,29 +116,79 @@ def get_voice_directory():
         # Default fallback to root audio directory
         return AUDIO_DIR
 
-# Function to check for pre-recorded audio file
+# Enhanced function to get audio with improved iOS compatibility
 def get_audio(letter, story_for_tts=None):
+    """
+    Get the appropriate audio file with iOS compatibility improvements.
+    
+    Parameters:
+    - letter: The letter to get audio for
+    - story_for_tts: The story text for text-to-speech fallback
+    
+    Returns:
+    - bytes: Audio data if successful, None otherwise
+    """
     # Get the appropriate voice directory
     voice_dir = get_voice_directory()
     
     # Check if pre-recorded audio file exists in voice directory
     audio_file_path = os.path.join(voice_dir, f"{letter}_story.mp3")
+    fallback_audio_path = os.path.join(AUDIO_DIR, f"{letter}_story.mp3")
     
-    if os.path.exists(audio_file_path):
-        # Return the pre-recorded audio file
-        with open(audio_file_path, "rb") as file:
-            return file.read()
-    else:
+    try:
+        # First try to get the audio from the selected voice directory
+        if os.path.exists(audio_file_path):
+            with open(audio_file_path, "rb") as file:
+                audio_data = file.read()
+                # Return bytes directly (no additional processing needed)
+                return audio_data
+        
         # Fall back to root audio directory
-        fallback_audio_path = os.path.join(AUDIO_DIR, f"{letter}_story.mp3")
-        if os.path.exists(fallback_audio_path):
+        elif os.path.exists(fallback_audio_path):
             with open(fallback_audio_path, "rb") as file:
-                return file.read()
+                audio_data = file.read()
+                # Return bytes directly (no additional processing needed)
+                return audio_data
+        
+        # Generate audio on the fly if no pre-recorded file exists
         elif story_for_tts:
-            # Generate audio on the fly if no pre-recorded file exists
-            return text_to_speech(story_for_tts)
+            try:
+                tts = gTTS(text=story_for_tts, lang='en', slow=False)
+                audio_bytes = io.BytesIO()
+                tts.write_to_fp(audio_bytes)
+                audio_bytes.seek(0)
+                return audio_bytes.getvalue()  # Return the raw bytes
+            except Exception as e:
+                st.error(f"Error generating audio: {str(e)}")
+                return None
+        
+        return None
     
-    return None
+    except Exception as e:
+        st.error(f"Error processing audio file: {str(e)}")
+        return None
+
+# Function to prepare audio for different devices
+def prepare_audio_for_device(audio_data, letter, voice_name):
+    """Prepare audio content based on device type"""
+    # Check if we're on iOS
+    is_ios = is_ios_device()
+    
+    if is_ios:
+        # For iOS devices, return audio bytes wrapped in HTML5 audio tag
+        audio_b64 = base64.b64encode(audio_data).decode()
+        
+        # HTML5 audio with preload attribute and better iOS compatibility
+        audio_html = f"""
+        <audio controls preload="metadata" playsinline style="width: 100%;">
+            <source src="data:audio/mp3;base64,{audio_b64}" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        """
+        return {'type': 'html', 'content': audio_html}
+    else:
+        # For desktop, use standard Streamlit audio
+        return {'type': 'bytes', 'content': audio_data}
 
 # Function to ask questions about the story
 def ask_about_story(question, letter, story_content):
@@ -278,6 +356,33 @@ def apply_custom_css():
         margin-bottom: 5px;
     }
     
+    /* iOS-specific audio player styling */
+    audio {
+        width: 100% !important;
+        height: 40px !important;
+        margin: 8px 0 !important;
+        border-radius: 8px !important;
+        background-color: #f8f9fa !important;
+    }
+    
+    /* Safari-specific audio fixes */
+    @supports (-webkit-appearance:none) {
+        audio {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    }
+    
+    /* Custom audio player for fallback */
+    .custom-audio-player {
+        width: 100%;
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #f0f5ff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
     /* Image display enhancements */
     .larger-image img {
         width: 100%;
@@ -407,6 +512,10 @@ def main():
         
     if 'show_watercolor' not in st.session_state:
         st.session_state.show_watercolor = True
+    
+    # Set device type detection
+    if 'device_type' not in st.session_state:
+        st.session_state.device_type = 'ios' if is_ios_device() else 'desktop'
     
     # Current letter
     letter = st.session_state.current_letter
@@ -711,11 +820,17 @@ def main():
                             audio_data = get_audio(letter, story_for_tts)
                             
                             if audio_data:
-                                # Display audio player
-                                st.audio(audio_data, format="audio/mp3")
+                                # Prepare audio based on device type
+                                audio_prepared = prepare_audio_for_device(audio_data, letter, st.session_state.selected_voice)
                                 
-                                # Display which voice is being used
-                                st.info(f"Playing with {st.session_state.selected_voice} voice")
+                                if audio_prepared['type'] == 'html':
+                                    # For iOS devices, use HTML5 audio player
+                                    st.markdown(audio_prepared['content'], unsafe_allow_html=True)
+                                    st.info(f"Playing with {st.session_state.selected_voice} voice (iOS optimized)")
+                                else:
+                                    # For desktop, use standard Streamlit audio
+                                    st.audio(audio_prepared['content'], format="audio/mp3")
+                                    st.info(f"Playing with {st.session_state.selected_voice} voice")
                                 
                                 # Add download button for the audio
                                 st.download_button(

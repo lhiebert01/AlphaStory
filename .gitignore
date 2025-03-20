@@ -58,3 +58,21 @@ Thumbs.db
 
 # Streamlit specific
 .streamlit/secrets.toml
+
+# Deployment guides
+DEPLOYMENT-GUIDE.md
+
+# Development files
+alphabet_audio_file_generator.py
+alphabet_audio_file_generator2.py
+alphabet_audio_file_generator3.py
+alphabet_book_streamlit_app.py
+alphabet_book_streamlit_app*.py
+appGoldBackupMar20.py
+create_pdf.py
+dual_voice_generator.py
+google_TTS_streamlit_test_app.py
+standard_storywriter.py
+standardized_prompts.txt
+static_html_book.py
+story_and_image_prompts.txt
