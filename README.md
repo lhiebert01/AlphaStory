@@ -2,6 +2,8 @@
 
 An interactive children's alphabet book application built with Streamlit, featuring narration in multiple voices, beautiful illustrations, and an AI-powered chatbot.
 
+![App Screenshot](Jack_and_Jill_Alphabet_Adventures_Streamlit_app_screen.png)
+
 ## 🌟 Features
 
 ### Story Experience
@@ -15,19 +17,23 @@ An interactive children's alphabet book application built with Streamlit, featur
 - **Educational Content**: Each story teaches about the featured letter with relevant vocabulary
 - **Discussion Questions**: Every story includes questions for parents and educators to use
 
+### Cross-Platform Support
+- **Desktop Compatibility**: Works seamlessly on Chrome, Firefox, Safari, and Edge
+- **Mobile Support**: Full iOS support including audio playback on iPhone and iPad
+- **Tablet Optimization**: Responsive design for various screen sizes
+
 ## 📱 Getting Started
 
 ### Prerequisites
 - Python 3.8+
-- Google Cloud account (for Text-to-Speech API)
 - OpenAI API key (for chatbot functionality)
 
 ### Installation
 
 1. Clone this repository
 ```bash
-git clone https://github.com/lhiebert01/alphabet-book-app.git
-cd alphabet-book-app
+git clone https://github.com/lhiebert01/AlphaStory.git
+cd AlphaStory
 ```
 
 2. Create a virtual environment
@@ -44,77 +50,61 @@ pip install -r requirements.txt
 4. Create a `.env` file with your API keys
 ```
 OPENAI_API_KEY=your-openai-api-key-here
-GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/google-credentials.json
 ```
 
 5. Run the app
 ```bash
-streamlit run alphabet_book_streamlit_app11.py
+streamlit run app.py
 ```
 
 ## 📂 Project Structure
 
 ```
-alphabet-book-app/
-├── alphabet_book_streamlit_app11.py  # Main Streamlit application
-├── alphabet_stories_new/             # Story text files (A_story.txt through Z_story.txt)
-├── alphabet_images_new/              # Realistic illustrations (A.png through Z.png)
+AlphaStory/
+├── app.py                           # Main Streamlit application
+├── alphabet_stories_new/            # Story text files (A_story.txt through Z_story.txt)
+├── alphabet_images_new/             # Realistic illustrations (A.png through Z.png)
 ├── alphabet_images_new_illustrations/ # Watercolor illustrations (A.png through Z.png)
-├── alphabet_audio_files/             # Base audio directory
-│   ├── female1/                      # Female voice 1 audio files
-│   ├── female2/                      # Female voice 2 audio files
-│   ├── male1/                        # Male voice 1 audio files
-│   └── male2/                        # Male voice 2 audio files
-├── requirements.txt                  # Required dependencies
-└── README.md                         # Project documentation
+├── alphabet_audio_files/            # Base audio directory
+│   ├── female1/                     # Female voice 1 audio files
+│   ├── female2/                     # Female voice 2 audio files
+│   ├── male1/                       # Male voice 1 audio files
+│   └── male2/                       # Male voice 2 audio files
+├── requirements.txt                 # Required dependencies
+├── render.yaml                      # Render deployment configuration
+└── README.md                        # Project documentation
 ```
 
-## 🔧 Voice Generation Tools
+## 🔧 Voice Features
 
-The project includes tools for generating audio files in different voices:
+The application includes:
 
-- **dual_voice_generator.py**: Generate audio files with both male and female voices
-- **google_tts_audio_generator.py**: Generate audio files using Google Cloud Text-to-Speech
+- **Pre-recorded audio narration** for all 26 stories
+- **Multiple voice options**: Choose between Female 1, Female 2, Male 1 and Male 2 voices
+- **Cross-platform audio playback**: Compatible with desktop browsers and iOS mobile devices
 
 ## 🚀 Deployment
 
-### Render
+This application is deployed at [https://alphastory.onrender.com/](https://alphastory.onrender.com/)
 
-This app can be deployed to Render following these steps:
+For detailed deployment instructions, please see [DEPLOYMENT-GUIDE.md](DEPLOYMENT-GUIDE.md).
 
-1. Push your code to GitHub
-2. Log in to [Render](https://render.com)
-3. Create a new Web Service, select your GitHub repo
-4. Configure as follows:
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `streamlit run alphabet_book_streamlit_app11.py`
-5. Add environment variables for your API keys
-6. Deploy
+## 📄 License & Copyright
 
-### Future Integrations
+**© 2024 Lindsay Hiebert. All Rights Reserved.**
 
-The project roadmap includes:
-- Database authentication
-- User registration and management
-- Payment processing via Stripe
-- Subscription tracking
-- Gumroad integration for digital distribution
+This is proprietary software. The code, documentation, stories, illustrations, and audio content are protected by copyright law.
 
-## 👥 Contributing
-
-Contributions are welcome! Please feel free to submit a pull request.
-
-## 📄 License
-
-This project is licensed under the MIT License.
+**Usage Restrictions:**
+- No use, copying, modification, merging, publication, distribution, sublicensing, or selling of this software is permitted without explicit written permission from the copyright owner.
+- Commercial use of any part of this project requires prior written approval.
+- For inquiries regarding licensing or usage, please contact the copyright owner.
 
 ## 👤 Contact
 
 Developed by [Lindsay Hiebert](https://www.linkedin.com/in/lindsayhiebert/)
-- LinkedIn: [lindsayhiebert](https://www.linkedin.com/in/lindsayhiebert/)
-
-## Contact
-
-Developed by [Lindsay Hiebert](https://www.linkedin.com/in/lindsayhiebert/)
 - GitHub: [lhiebert01](https://github.com/lhiebert01)
 - LinkedIn: [lindsayhiebert](https://www.linkedin.com/in/lindsayhiebert/)
+
+
+
