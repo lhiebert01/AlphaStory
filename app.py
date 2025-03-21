@@ -570,9 +570,9 @@ def main():
         st.markdown('<div class="sidebar-title">Purchase Options</div>', unsafe_allow_html=True)
         
         if not st.session_state.has_purchased:
-            if st.button("🛒 Buy This Book ($15)", use_container_width=True):
-                st.session_state.has_purchased = True
-                st.success("Thank you for your purchase!")
+            if st.button("🛒 Buy This Book ($25)", use_container_width=True):
+                st.session_state.has_purchased = False
+                st.success("Only FREE Preview Available Now." )
                 st.rerun()
         else:
             st.success("✅ You own this book")
@@ -725,7 +725,7 @@ def main():
                         new_letter = current_letter
                         # Check if user can access this letter
                         if ord(new_letter) - ord('A') > 2 and not st.session_state.has_purchased:
-                            st.warning("Please purchase the book to access letters beyond C")
+                            st.warning("This is a PREVIEW version only. Please purchase the book to access letters beyond C")
                         else:
                             st.session_state.current_letter = new_letter
                             st.rerun()
@@ -749,7 +749,7 @@ def main():
                             new_letter = current_letter
                             # Check if user can access this letter
                             if ord(new_letter) - ord('A') > 2 and not st.session_state.has_purchased:
-                                st.warning("Please purchase the book to access letters beyond C")
+                                st.warning("This is a PREVIEW Version Only! Please purchase the book to access letters beyond C")
                             else:
                                 st.session_state.current_letter = new_letter
                                 st.rerun()
